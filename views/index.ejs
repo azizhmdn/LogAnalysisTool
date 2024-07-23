@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Analysis Tool</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Log Analysis Results</h1>
+    <div>
+        <h2>Summary</h2>
+        <p>Total lines analyzed: <%= result.totalLines %></p>
+        <p>Error count: <%= result.errorCount %></p>
+        <p>Warning count: <%= result.warningCount %></p>
+        <p>Info count: <%= result.infoCount %></p>
+    </div>
+
+    <div>
+        <h2>Log Level Distribution</h2>
+        <canvas id="logLevelChart"></canvas>
+    </div>
+
+    <div>
+        <h2>Top 5 Errors</h2>
+        <ul>
+            <% result.topErrors.forEach(([error, count]) => { %>
+                <li><%= error %>: <%= count %> occurrences</li>
+            <% }); %>
+        </ul>
+    </div>
+    <script>
+        const ctx = document.getElementById('logLevelChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Error', 'Warning', 'Info'],
+                datasets: [{
+                    data: [<%= result.errorCount %>, <%= result.warningCount %>, <%= result.infoCount %>],
+                    backgroundColor: ['#FF6384', '#FFCE56', '#36A2EB']
+                }]
+            }
+        });
+    </script>
+</body>
+
+</html>
